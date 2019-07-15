@@ -47,11 +47,19 @@ function App() {
 
   const removeTodoAtIndex = index => {
     if (index === 0 && todos.length === 1) return;
-    setTodos(todos => todos.slice(0, index).concat(todos.slice(index + 1, todos.length)));
+    setTodos(todos =>
+      todos.slice(0, index).concat(todos.slice(index + 1, todos.length))
+    );
     setTimeout(() => {
       document.forms[0].elements[index - 1].focus();
     }, 0);
-  }
+  };
+
+  const toggleTodoCompleteAtIndex = index => {
+    const newTodos = [...todos];
+    newTodos[index].isCompleted = !newTodos[index].isCompleted;
+    setTodos(newTodos);
+  };
 
   return (
     <div className="app">
@@ -59,8 +67,13 @@ function App() {
       <form className="todo-list">
         <ul>
           {todos.map((todo, index) => (
-            <div className="todo">
-              <div className="checkbox" />
+            <div className={`todo ${todo.isCompleted && 'todo-is-completed'}`}>
+              <div
+                className="checkbox"
+                onClick={() => toggleTodoCompleteAtIndex(index)}
+              >
+                {todo.isCompleted && ( <span>&#x2714;</span> )}
+              </div>
               <input
                 type="text"
                 value={todo.content}
